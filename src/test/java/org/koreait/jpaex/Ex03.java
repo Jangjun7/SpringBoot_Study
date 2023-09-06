@@ -26,6 +26,7 @@ public class Ex03 {
                 //.regDt(LocalDateTime.now())
                 .build();
         em.persist(member);
+        em.flush();
         System.out.printf("regDt : %s, modDt : %s%n", member.getRegDt(), member.getModDt());
 
         System.out.println(member);
