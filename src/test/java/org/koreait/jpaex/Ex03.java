@@ -13,14 +13,13 @@ import java.time.LocalDateTime;
 @SpringBootTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class Ex01 {
+public class Ex03 {
     @PersistenceContext
     private EntityManager em;
 
     @Test
     void test1(){
         Member member = Member.builder()
-                .userNo(1L)
                 .userId("user01")
                 .userPw("123456")
                 .userNm("사용자01")
@@ -28,18 +27,18 @@ public class Ex01 {
                 .build();
         em.persist(member);
         em.flush();
+        System.out.printf("regDt : %s, modDt : %s%n", member.getRegDt(), member.getModDt());
 
-        em.detach(member); // 영속성 분리 -> 변화감지X
+        System.out.println(member);
+        try{
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {}
 
-        member.setUserNm("수정(사용자01)"); // update
+        member.setUserNm("(수정)사용자01");
         em.flush();
 
-        em.merge(member); // 분리된 영속 -> 영속 상태 -> 변화감지 O
-        em.flush();
+        System.out.println(member);
+        System.out.printf("regDt : %s, modDt : %s%n", member.getRegDt(), member.getModDt());
 
-        /*
-        em.remove(member); // delete
-        em.flush();
-         */
     }
 }
